@@ -1,0 +1,69 @@
+#! /bin/sh
+# aldc: Add LaTeX DevContainer
+
+BACKUP_TARGET='.gitignore .latexmkrc .textlintrc'
+TMP_DIR='.tmp'
+LATEX_ENV='latexenv'
+LATEX_ENV_REPOSITORY='https://github.com/smkwlab/latex-environment.git'
+
+if [ -d .devcontainer ]; then
+  echo already added
+  exit
+fi
+
+if [ ! -d .git ]; then
+  (
+  git init .
+  git add .
+  git commit -m 'initial commit'
+  ) > /dev/null 2>&1
+  echo 'git initialized'
+fi
+
+case $(uname -m) in
+  x86_64)
+    branch=alpine
+    ;;
+  *)
+    branch=main
+    ;;
+esac
+
+mkdir "${TMP_DIR}"
+backups=''
+for f in ${BACKUP_TARGET}; do
+  if [ -f "${f}" ]; then
+    backups="${backups} ${f}"
+  fi
+done
+if [ "${backups}" != '' ]; then
+  echo 'mv files temporary to avoid conflict'
+  (
+  git mv ${backups} "${TMP_DIR}"
+  git commit -m 'mv files temporary to avoid conflict'
+  ) > /dev/null 2>&1
+fi
+
+echo add LaTeX environment
+(
+git remote add "${LATEX_ENV}" "${LATEX_ENV_REPOSITORY}"
+git fetch "${LATEX_ENV}"
+git merge --allow-unrelated-histories -m 'add latex environment' "${LATEX_ENV}/${branch}"
+git remote remove "${LATEX_ENV}"
+) >/dev/null 2>&1
+
+echo 'update dot files'
+(
+for f in ${TMP_DIR}/.??* ; do
+  [ -f "${f}" ] || continue
+  target="$(basename ${f})"
+  if [ -f "${target}" ]; then
+    git rm -r "${target}"
+  fi
+  git mv "${f}" .
+done
+rmdir "${TMP_DIR}"
+git commit -m 'update dot files'
+) >/dev/null 2>&1
+
+#git push
