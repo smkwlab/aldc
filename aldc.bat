@@ -1,4 +1,4 @@
-rem @echo off
+@echo off
 rem adlc: Add LaTeX DevContainer
 
 set BACKUP_TARGET=.gitignore .latexmkrc .textlintrc
