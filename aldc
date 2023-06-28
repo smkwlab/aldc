@@ -12,58 +12,45 @@ if [ -d .devcontainer ]; then
 fi
 
 if [ ! -d .git ]; then
-  (
   git init .
   git add .
-  git commit -m 'initial commit'
-  ) > /dev/null 2>&1
-  echo 'git initialized'
+  git rm --cached aldc
+  git commit -m "initial commit"
 fi
 
 case $(uname -m) in
   x86_64)
-    branch=alpine
+    BRANCH=alpine
     ;;
   *)
-    branch=main
+    BRANCH=main
     ;;
 esac
 
 mkdir "${TMP_DIR}"
-backups=''
 for f in ${BACKUP_TARGET}; do
-  if [ -f "${f}" ]; then
-    backups="${backups} ${f}"
-  fi
+  [ -f "${f}" ] && git mv ${f} ${TMP_DIR}
 done
-if [ "${backups}" != '' ]; then
-  echo 'mv files temporary to avoid conflict'
-  (
-  git mv ${backups} "${TMP_DIR}"
-  git commit -m 'mv files temporary to avoid conflict'
-  ) > /dev/null 2>&1
-fi
+git commit -m "aldc initialize: backup dot files to avoid conflict"
 
 echo add LaTeX environment
-(
 git remote add "${LATEX_ENV}" "${LATEX_ENV_REPOSITORY}"
 git fetch "${LATEX_ENV}"
-git merge --allow-unrelated-histories -m 'add latex environment' "${LATEX_ENV}/${branch}"
+git merge --allow-unrelated-histories -m "aldc: add latex container" "${LATEX_ENV}/${BRANCH}"
 git remote remove "${LATEX_ENV}"
-) >/dev/null 2>&1
 
-echo 'update dot files'
-(
-for f in ${TMP_DIR}/.??* ; do
-  [ -f "${f}" ] || continue
-  target="$(basename ${f})"
-  if [ -f "${target}" ]; then
-    git rm -r "${target}"
+echo "recover dot files"
+cd ${TMP_DIR}
+for f in ${BACKUP_TARGET}; do
+  if [ -f ${f} ]; then
+    git rm ../${f}
+    git mv ${f} ..
   fi
-  git mv "${f}" .
 done
+cd ..
 rmdir "${TMP_DIR}"
-git commit -m 'update dot files'
-) >/dev/null 2>&1
+git commit -m "aldc finilize: recover dot files"
 
-#git push
+if [ -d .devcontainer ]; then
+  echo You can delete aldc
+fi    
