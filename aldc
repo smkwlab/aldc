@@ -2,7 +2,6 @@
 # aldc: Add LaTeX DevContainer
 
 BACKUP_TARGET='.gitignore .latexmkrc .textlintrc'
-TMP_DIR='.tmp'
 LATEX_ENV='latexenv'
 LATEX_ENV_REPOSITORY='https://github.com/smkwlab/latex-environment.git'
 
@@ -27,11 +26,10 @@ case $(uname -m) in
     ;;
 esac
 
-mkdir "${TMP_DIR}"
 for f in ${BACKUP_TARGET}; do
-  [ -f "${f}" ] && git mv ${f} ${TMP_DIR}
+  [ -f "${f}" ] && git mv -f ${f} ${f}-orig
 done
-git commit -m "aldc initialize: backup dot files to avoid conflict"
+git commit -m "aldc initialize: rename dot files to avoid conflict"
 
 echo add LaTeX environment
 git remote add "${LATEX_ENV}" "${LATEX_ENV_REPOSITORY}"
@@ -39,18 +37,4 @@ git fetch "${LATEX_ENV}"
 git merge --allow-unrelated-histories -m "aldc: add latex container" "${LATEX_ENV}/${BRANCH}"
 git remote remove "${LATEX_ENV}"
 
-echo "recover dot files"
-cd ${TMP_DIR}
-for f in ${BACKUP_TARGET}; do
-  if [ -f ${f} ]; then
-    git rm ../${f}
-    git mv ${f} ..
-  fi
-done
-cd ..
-rmdir "${TMP_DIR}"
-git commit -m "aldc finilize: recover dot files"
-
-if [ -d .devcontainer ]; then
-  echo You can delete aldc
-fi    
+git commit -m "aldc finalize: recover dot files"
