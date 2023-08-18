@@ -8,25 +8,16 @@ LaTeX の文章 (.tex ファイル) に [VSCode + devcontainer LaTeX 環境](htt
 
 ## 使い方
 
-UNIX系OS (Linux, macOS)の基本的な使い方は知っている前提で説明します。
+UNIX系OS (Linux, macOS)の基本的な使い方は知っている前提で説明します。Windows の場合、Git Bash がインストール済みであることを前提とします。
 
-まずOS毎に異なる事前準備が必要です。以下では，この環境を追加したい LaTeX の文章があるフォルダを ${LATEX_SRC} と表記します。
+以下では，この環境を追加したい LaTeX の文章があるフォルダを ${LATEX_SRC} と表記します。
 
-### Windows編
-
-- PowerShell を開いて、${LATEX_SRC} に移動します。
-- そのディレクトリで PowerShell 上で `wsl` を実行して bash を起動します。
-- 共通処理に移動
-
-### Mac/Linux編
-
-- ターミナルを開いて、${LATEX_SRC} に移動します。
-- 共通処理に移動
-
-### 共通処理
-
+- `Windows` ならば `Git Bash`、Mac か Linux ならば `ターミナル` を開いて、${LATEX_SRC} に移動します。
 - 以下のコマンドを実行します。
 
 ``` shell
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/smkwlab/aldc/main/aldc)"
 ```
+- VS Code で ${LATEX_SRC} を開くと、開発コンテナを開くようダイアログが表示されるので、それに従ってください
+- VS Code の LaTeX Workshop の機能を使って、LaTeX 文章を編集してください
+- textlint もインストール済みなので活用してください
