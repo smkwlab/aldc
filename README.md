@@ -1,4 +1,4 @@
-# Add Linux DevContainer
+# Add LaTeX DevContainer
 
 aldc: Add LaTeX DevContainer to your LaTeX document repository
 
