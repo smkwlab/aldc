@@ -36,5 +36,13 @@ git remote add "${LATEX_ENV}" "${LATEX_ENV_REPOSITORY}"
 git fetch "${LATEX_ENV}"
 git merge --allow-unrelated-histories -m "aldc: add latex container" "${LATEX_ENV}/${BRANCH}"
 git remote remove "${LATEX_ENV}"
+git commit -m "aldc: merged"
 
+for f in ${BACKUP_TARGET}; do
+  if [ -f "${f}-orig" ]; then
+    git mv -f ${f} ${f}-aldc
+    git mv -f ${f}-orig ${f}
+  fi
+done
+git add .
 git commit -m "aldc finalize: recover dot files"
