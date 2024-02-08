@@ -1,9 +1,16 @@
 #! /bin/sh
 # aldc: Add LaTeX DevContainer
 
+RELEASE=0.1.0
+REPOSITORY_NAME='latex-environment'
+REPOSITORY_OWNER='smkwlab'
+REPOSITORY_URL="https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}/"
+RELEASE_BASE="${REPOSITORY_NAME}-${RELEASE}"
+ZIP_NAME="${RELEASE_BASE}.zip"
+
+TARGET=${REPOSITORY_URL}/archive/refs/tags/v${RELEASE}.zip
+
 BACKUP_TARGET='.gitignore .latexmkrc .textlintrc'
-LATEX_ENV='latexenv'
-LATEX_ENV_REPOSITORY='https://github.com/smkwlab/latex-environment.git'
 
 if [ -d .devcontainer ]; then
   echo already added
@@ -17,32 +24,23 @@ if [ ! -d .git ]; then
   git commit -m "initial commit"
 fi
 
-case $(uname -m) in
-  x86_64)
-    BRANCH=alpine
-    ;;
-  *)
-    BRANCH=main
-    ;;
-esac
-
-for f in ${BACKUP_TARGET}; do
-  [ -f "${f}" ] && git mv -f ${f} ${f}-orig
-done
-git commit -m "aldc initialize: rename dot files to avoid conflict"
+echo LaTeX environment
+curl -sLJO ${TARGET}
+unzip -x ${ZIP_NAME}
+rm ${ZIP_NAME}
+cd ${RELEASE_BASE}
 
 echo add LaTeX environment
-git remote add "${LATEX_ENV}" "${LATEX_ENV_REPOSITORY}"
-git fetch "${LATEX_ENV}"
-git merge --allow-unrelated-histories -m "aldc: add latex container" "${LATEX_ENV}/${BRANCH}"
-git remote remove "${LATEX_ENV}"
-git commit -m "aldc: merged"
-
-for f in ${BACKUP_TARGET}; do
-  if [ -f "${f}-orig" ]; then
-    git mv -f ${f} ${f}-aldc
-    git mv -f ${f}-orig ${f}
-  fi
+for i in .??*; do
+    if [ -e ../${i} ]; then
+        mv -f ${i} ../${i}-aldc
+    else
+        mv -f ${i} ../
+    fi
 done
+
+cd ..
+rm -rf ${RELEASE_BASE}
+
 git add .
-git commit -m "aldc finalize: recover dot files"
+git commit -m "add LaTeX environment"
