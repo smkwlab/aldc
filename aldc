@@ -10,7 +10,7 @@ ZIP_NAME="${RELEASE_BASE}.zip"
 
 TARGET=${REPOSITORY_URL}/archive/refs/tags/v${RELEASE}.zip
 
-BACKUP_TARGET='.gitignore .latexmkrc .textlintrc .github/workflows/release.yml'
+BACKUP_TARGET='.gitignore .latexmkrc .textlintrc .github/auto_assign_myteams.yml .github/workflows/release.yml'
 
 if [ -d .devcontainer ]; then
   echo "The LaTeX environment already exists."
