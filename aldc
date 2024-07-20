@@ -10,8 +10,6 @@ ZIP_NAME="${RELEASE_BASE}.zip"
 
 TARGET=${REPOSITORY_URL}/archive/refs/tags/v${RELEASE}.zip
 
-BACKUP_TARGET='.gitignore .latexmkrc .textlintrc .github/auto_assign_myteams.yml .github/workflows/release.yml'
-
 if [ -d .devcontainer ]; then
   echo "The LaTeX environment already exists."
   exit
@@ -26,18 +24,19 @@ fi
 
 echo download LaTeX environment
 curl -sLJO ${TARGET}
-unzip -x ${ZIP_NAME}
+unzip ${ZIP_NAME}
 rm ${ZIP_NAME}
 cd ${RELEASE_BASE}
 
 echo add LaTeX environment
 backups=""
-for i in .??*; do
+for i in $(find . -type f); do
+    echo check ${i}
     if [ -e ../${i} ]; then
         mv -f ${i} ../${i}-aldc
         backups="${backups} ${i}-aldc"
     else
-        mv -f ${i} ../
+        mv -f ${i} ../${i}
     fi
 done
 
