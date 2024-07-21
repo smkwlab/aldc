@@ -45,6 +45,7 @@ rm -rf ${RELEASE_BASE}
 
 git add .
 git commit -m "add LaTeX environment"
+git push
 
 echo "The addition of the LaTeX environment has been completed."
 
