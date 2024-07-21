@@ -4,7 +4,7 @@
 RELEASE=0.2.2
 REPOSITORY_NAME='latex-environment'
 REPOSITORY_OWNER='smkwlab'
-REPOSITORY_URL="https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}/"
+REPOSITORY_URL="https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}"
 RELEASE_BASE="${REPOSITORY_NAME}-${RELEASE}"
 ZIP_NAME="${RELEASE_BASE}.zip"
 
@@ -31,7 +31,6 @@ cd ${RELEASE_BASE}
 echo add LaTeX environment
 backups=""
 for i in $(find . -type f); do
-    echo check ${i}
     if [ -e ../${i} ]; then
         mv -f ${i} ../${i}-aldc
         backups="${backups} ${i}-aldc"
@@ -45,6 +44,7 @@ rm -rf ${RELEASE_BASE}
 
 git add .
 git commit -m "add LaTeX environment"
+git push
 
 echo "The addition of the LaTeX environment has been completed."
 
