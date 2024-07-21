@@ -31,7 +31,6 @@ cd ${RELEASE_BASE}
 echo add LaTeX environment
 backups=""
 for i in $(find . -type f); do
-    echo check ${i}
     if [ -e ../${i} ]; then
         mv -f ${i} ../${i}-aldc
         backups="${backups} ${i}-aldc"
