@@ -24,7 +24,7 @@ fi
 
 echo download LaTeX environment
 curl -sLJO ${TARGET}
-unzip ${ZIP_NAME}
+unzip -q ${ZIP_NAME}
 rm ${ZIP_NAME}
 cd ${RELEASE_BASE}
 
@@ -35,6 +35,10 @@ for i in $(find . -type f); do
         mv -f ${i} ../${i}-aldc
         backups="${backups} ${i}-aldc"
     else
+        dir=../$(dirname ${i})
+        if [ ! -d ${dir} ]; then
+            mkdir -p ${dir}
+        fi
         mv -f ${i} ../${i}
     fi
 done
@@ -43,8 +47,8 @@ cd ..
 rm -rf ${RELEASE_BASE}
 
 git add .
-git commit -m "add LaTeX environment"
-git push
+git commit --quiet --porcelain -m "add LaTeX environment"
+git push --quiet
 
 echo "The addition of the LaTeX environment has been completed."
 
