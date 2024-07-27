@@ -35,6 +35,10 @@ for i in $(find . -type f); do
         mv -f ${i} ../${i}-aldc
         backups="${backups} ${i}-aldc"
     else
+        dir=../$(dirname ${i})
+        if [ ! -d ${dir} ]; then
+            mkdir -p ${dir}
+        fi
         mv -f ${i} ../${i}
     fi
 done
