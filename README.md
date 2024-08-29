@@ -38,6 +38,5 @@ UNIX系OS (Linux, macOS)の基本的な使い方は知っている前提で説�
    - リアルタイムで textlint による校正結果が（赤波線で）示されますので活用してください
 5. tex ファイルを保存すると latexmk が自動実行され PDF が生成されます
 6. SyncTeX により、tex ファイルと PDF ファイルの相互ジャンプ可能です
-     - tex ファイル上で Ctrl+Alt+j (Windowsの場合)、あるいは command+option+j をクリックすると PDF 上の該当箇所にジャンプします
-     - VS Code 内の PDF 上で、Ctrl(Windowsの場合)あるいはcommand(macの場合)を押しながらクリックすると、tex ファイル上の該当箇所にジャンプします
-6. 
+     - tex ファイル上で Ctrl+Alt+j (Windowsの場合) あるいは command+option+j (macの場合) をクリックすると PDF 上の該当箇所にジャンプします
+     - VS Code 内の PDF 上で、Ctrl (Windowsの場合) あるいは command (macの場合) を押しながらクリックすると、tex ファイル上の該当箇所にジャンプします
