@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 # aldc: Add LaTeX DevContainer
 
 RELEASE=0.2.2
@@ -48,7 +48,6 @@ rm -rf ${RELEASE_BASE}
 
 git add .
 git commit --quiet --porcelain -m "add LaTeX environment"
-git push --quiet
 
 echo "The addition of the LaTeX environment has been completed."
 
