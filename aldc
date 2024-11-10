@@ -15,11 +15,13 @@ if [ -d .devcontainer ]; then
   exit
 fi
 
+GIT_INIT=false
 if [ ! -d .git ]; then
   git init .
   git add .
   git rm --cached aldc
   git commit -m "initial commit"
+  GIT_INIT=true
 fi
 
 echo download LaTeX environment
@@ -48,6 +50,7 @@ rm -rf ${RELEASE_BASE}
 
 git add .
 git commit --quiet --porcelain -m "add LaTeX environment"
+[ "${GIT_INIT}" != "true" ] && git push --quiet
 
 echo "The addition of the LaTeX environment has been completed."
 
