@@ -50,7 +50,7 @@ rm -rf ${RELEASE_BASE}
 
 git add .
 git commit --quiet --porcelain -m "add LaTeX environment"
-[ "${GIT_INIT}" != "true" ] && git push --quiet
+# [ "${GIT_INIT}" != "true" ] && git push --quiet
 
 echo "The addition of the LaTeX environment has been completed."
 
