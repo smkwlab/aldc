@@ -1,7 +1,7 @@
 #! /bin/bash
 # aldc: Add LaTeX DevContainer
 
-RELEASE=0.2.2
+RELEASE=0.2.3
 REPOSITORY_NAME='latex-environment'
 REPOSITORY_OWNER='smkwlab'
 REPOSITORY_URL="https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}"
@@ -30,7 +30,7 @@ unzip -q ${ZIP_NAME}
 rm ${ZIP_NAME}
 cd ${RELEASE_BASE}
 
-echo add LaTeX environment
+echo Integrate LaTeX environment
 backups=""
 for i in $(find . -type f); do
     if [ -e ../${i} ]; then
@@ -48,11 +48,15 @@ done
 cd ..
 rm -rf ${RELEASE_BASE}
 
+if [ $(uname -m) = "x86_64" ]; then
+    sed -i -e '/image/s/-debian/-alpine/' .devcontainer/devcontainer.json
+fi
+
 git add .
 git commit --quiet --porcelain -m "add LaTeX environment"
 # [ "${GIT_INIT}" != "true" ] && git push --quiet
 
-echo "The addition of the LaTeX environment has been completed."
+echo "The LaTeX environment integration is complete."
 
 if [ "${backups}" != "" ]; then
     echo You may delete the following files: ${backups}
