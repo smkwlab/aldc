@@ -48,10 +48,6 @@ done
 cd ..
 rm -rf ${RELEASE_BASE}
 
-if [ $(uname -m) = "x86_64" ]; then
-    sed -i -e '/image/s/-debian/-alpine/' .devcontainer/devcontainer.json
-fi
-
 git add .
 git commit --quiet --porcelain -m "add LaTeX environment"
 # [ "${GIT_INIT}" != "true" ] && git push --quiet
