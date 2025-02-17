@@ -1,7 +1,7 @@
 #! /bin/bash
 # aldc: Add LaTeX DevContainer
 
-RELEASE=0.2.3
+RELEASE=0.2.5
 REPOSITORY_NAME='latex-environment'
 REPOSITORY_OWNER='smkwlab'
 REPOSITORY_URL="https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}"
