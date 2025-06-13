@@ -1,14 +1,13 @@
 #! /bin/bash
 # aldc: Add LaTeX DevContainer
 
-RELEASE=0.4.1
 REPOSITORY_NAME='latex-environment'
 REPOSITORY_OWNER='smkwlab'
 REPOSITORY_URL="https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}"
-RELEASE_BASE="${REPOSITORY_NAME}-${RELEASE}"
-ZIP_NAME="${RELEASE_BASE}.zip"
+BRANCH='release'
+ZIP_NAME="${REPOSITORY_NAME}-${BRANCH}.zip"
 
-TARGET=${REPOSITORY_URL}/archive/refs/tags/v${RELEASE}.zip
+TARGET=${REPOSITORY_URL}/archive/refs/heads/${BRANCH}.zip
 
 if [ -d .devcontainer ]; then
   echo "The LaTeX environment already exists."
@@ -28,7 +27,7 @@ echo download LaTeX environment
 curl -sLJO ${TARGET}
 unzip -q ${ZIP_NAME}
 rm ${ZIP_NAME}
-cd ${RELEASE_BASE}
+cd ${REPOSITORY_NAME}-${BRANCH}
 
 echo Integrate LaTeX environment
 backups=""
