@@ -56,13 +56,23 @@ fi
 
 GIT_INIT=false
 if [ ! -d .git ]; then
-  git init .
-  git add .
-  # aldcファイルが存在する場合のみ除外
-  if git ls-files --cached | grep -q "^aldc$"; then
-    git rm --cached aldc
+  if [ "$QUIET" = "false" ]; then
+    git init .
+    git add .
+    # aldcファイルが存在する場合のみ除外
+    if git ls-files --cached | grep -q "^aldc$"; then
+      git rm --cached aldc
+    fi
+    git commit -m "initial commit"
+  else
+    git init . >/dev/null 2>&1
+    git add . >/dev/null 2>&1
+    # aldcファイルが存在する場合のみ除外
+    if git ls-files --cached | grep -q "^aldc$"; then
+      git rm --cached aldc >/dev/null 2>&1
+    fi
+    git commit -m "initial commit" >/dev/null 2>&1
   fi
-  git commit -m "initial commit"
   GIT_INIT=true
 fi
 
@@ -90,8 +100,13 @@ done
 cd ..
 rm -rf ${RELEASE_BASE}
 
-git add .
-git commit --quiet --porcelain -m "add LaTeX environment"
+if [ "$QUIET" = "false" ]; then
+    git add .
+    git commit --quiet --porcelain -m "add LaTeX environment"
+else
+    git add . >/dev/null 2>&1
+    git commit --quiet --porcelain -m "add LaTeX environment" >/dev/null 2>&1
+fi
 # [ "${GIT_INIT}" != "true" ] && git push --quiet
 
 log "The LaTeX environment integration is complete."
