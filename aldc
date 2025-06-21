@@ -15,8 +15,8 @@ if [ "${ALDC_QUIET:-}" = "1" ]; then
     QUIET=true
 fi
 
-for arg in "$@"; do
-    case $arg in
+while [ $# -gt 0 ]; do
+    case $1 in
         --quiet|-q)
             QUIET=true
             shift
@@ -35,7 +35,9 @@ for arg in "$@"; do
             exit 0
             ;;
         *)
-            # Unknown option
+            echo "Unknown option: $1" >&2
+            echo "Use --help for usage information" >&2
+            exit 1
             ;;
     esac
 done
