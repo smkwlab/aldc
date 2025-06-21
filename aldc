@@ -9,8 +9,46 @@ ZIP_NAME="${REPOSITORY_NAME}-${BRANCH}.zip"
 
 TARGET=${REPOSITORY_URL}/archive/refs/heads/${BRANCH}.zip
 
+# Parse command line arguments for quiet mode
+QUIET=false
+if [ "${ALDC_QUIET:-}" = "1" ]; then
+    QUIET=true
+fi
+
+for arg in "$@"; do
+    case $arg in
+        --quiet|-q)
+            QUIET=true
+            shift
+            ;;
+        --help|-h)
+            echo "Usage: aldc [--quiet|-q] [--help|-h]"
+            echo ""
+            echo "Add LaTeX DevContainer to the current directory."
+            echo ""
+            echo "Options:"
+            echo "  --quiet, -q     Suppress output messages"
+            echo "  --help, -h      Show this help message"
+            echo ""
+            echo "Environment Variables:"
+            echo "  ALDC_QUIET=1    Enable quiet mode"
+            exit 0
+            ;;
+        *)
+            # Unknown option
+            ;;
+    esac
+done
+
+# Logging function
+log() {
+    if [ "$QUIET" = "false" ]; then
+        echo "$1"
+    fi
+}
+
 if [ -d .devcontainer ]; then
-  echo "The LaTeX environment already exists."
+  log "The LaTeX environment already exists."
   exit
 fi
 
@@ -18,18 +56,21 @@ GIT_INIT=false
 if [ ! -d .git ]; then
   git init .
   git add .
-  git rm --cached aldc
+  # aldcファイルが存在する場合のみ除外
+  if git ls-files --cached | grep -q "^aldc$"; then
+    git rm --cached aldc
+  fi
   git commit -m "initial commit"
   GIT_INIT=true
 fi
 
-echo download LaTeX environment
+log "download LaTeX environment"
 curl -sLJO ${TARGET}
 unzip -q ${ZIP_NAME}
 rm ${ZIP_NAME}
 cd ${REPOSITORY_NAME}-${BRANCH}
 
-echo Integrate LaTeX environment
+log "Integrate LaTeX environment"
 backups=""
 for i in $(find . -type f); do
     if [ -e ../${i} ]; then
@@ -51,8 +92,8 @@ git add .
 git commit --quiet --porcelain -m "add LaTeX environment"
 # [ "${GIT_INIT}" != "true" ] && git push --quiet
 
-echo "The LaTeX environment integration is complete."
+log "The LaTeX environment integration is complete."
 
 if [ "${backups}" != "" ]; then
-    echo You may delete the following files: ${backups}
+    log "You may delete the following files: ${backups}"
 fi
