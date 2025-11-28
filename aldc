@@ -7,6 +7,16 @@ REPOSITORY_URL="https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}"
 BRANCH='release'
 ZIP_NAME="${REPOSITORY_NAME}-${BRANCH}.zip"
 
+# Files to exclude from latex-environment integration
+# These workflows are designed for latex-environment development and are not
+# suitable for thesis/document repositories
+EXCLUDE_PATTERNS=(
+    ".github/workflows/branch-cleanup.yml"
+    ".github/workflows/pr-auto-cleanup.yml"
+    ".github/workflows/check-texlive-updates.yml"
+    ".github/workflows/update-release-branch.yml"
+)
+
 TARGET=${REPOSITORY_URL}/archive/refs/heads/${BRANCH}.zip
 
 # Parse command line arguments for quiet mode
@@ -81,6 +91,15 @@ curl -sLJO ${TARGET}
 unzip -q ${ZIP_NAME}
 rm ${ZIP_NAME}
 cd ${REPOSITORY_NAME}-${BRANCH}
+
+# Remove excluded files before integration
+log "Applying file exclusions..."
+for pattern in "${EXCLUDE_PATTERNS[@]}"; do
+    if [ -f "$pattern" ]; then
+        rm -f "$pattern"
+        log "  Excluded: $pattern"
+    fi
+done
 
 log "Integrate LaTeX environment"
 backups=""
