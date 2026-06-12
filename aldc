@@ -96,7 +96,7 @@ if ! unzip -q "${ZIP_NAME}"; then
     rm -f "${ZIP_NAME}"
     exit 1
 fi
-rm "${ZIP_NAME}"
+rm -f "${ZIP_NAME}"
 cd "${REPOSITORY_NAME}-${BRANCH}" || {
     echo "Error: extracted directory ${REPOSITORY_NAME}-${BRANCH} not found" >&2
     exit 1
@@ -126,7 +126,10 @@ for i in $(find . -type f); do
     fi
 done
 
-cd ..
+cd .. || {
+    echo "Error: failed to return to parent directory" >&2
+    exit 1
+}
 rm -rf "${REPOSITORY_NAME}-${BRANCH}"
 
 if [ "$QUIET" = "false" ]; then
