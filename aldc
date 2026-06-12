@@ -87,10 +87,21 @@ if [ ! -d .git ]; then
 fi
 
 log "download LaTeX environment"
-curl -sLJO ${TARGET}
-unzip -q ${ZIP_NAME}
-rm ${ZIP_NAME}
-cd ${REPOSITORY_NAME}-${BRANCH}
+if ! curl -fsSLJO "${TARGET}"; then
+    echo "Error: failed to download LaTeX environment from ${TARGET}" >&2
+    rm -f "${ZIP_NAME}"
+    exit 1
+fi
+if ! unzip -q "${ZIP_NAME}"; then
+    echo "Error: failed to extract ${ZIP_NAME}" >&2
+    rm -f "${ZIP_NAME}"
+    exit 1
+fi
+rm -f "${ZIP_NAME}"
+cd "${REPOSITORY_NAME}-${BRANCH}" || {
+    echo "Error: extracted directory ${REPOSITORY_NAME}-${BRANCH} not found" >&2
+    exit 1
+}
 
 # Remove excluded files before integration
 log "Applying file exclusions..."
@@ -116,15 +127,18 @@ for i in $(find . -type f); do
     fi
 done
 
-cd ..
-rm -rf ${RELEASE_BASE}
+cd .. || {
+    echo "Error: failed to return to parent directory" >&2
+    exit 1
+}
+rm -rf "${REPOSITORY_NAME}-${BRANCH}"
 
 if [ "$QUIET" = "false" ]; then
     git add .
-    git commit --quiet --porcelain -m "add LaTeX environment"
+    git diff --cached --quiet || git commit --quiet -m "add LaTeX environment"
 else
     git add . >/dev/null 2>&1
-    git commit --quiet --porcelain -m "add LaTeX environment" >/dev/null 2>&1
+    git diff --cached --quiet || git commit --quiet -m "add LaTeX environment" >/dev/null 2>&1
 fi
 # [ "${GIT_INIT}" != "true" ] && git push --quiet
 
