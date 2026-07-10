@@ -1,8 +1,25 @@
 #! /bin/bash
 # aldc: Add LaTeX DevContainer
 
-REPOSITORY_NAME='latex-environment'
-REPOSITORY_OWNER='smkwlab'
+# Source of the LaTeX devcontainer. Defaults to smkwlab/latex-environment;
+# other orgs can point aldc at their own fork via these env vars.
+REPOSITORY_NAME="${ALDC_REPOSITORY_NAME:-latex-environment}"
+REPOSITORY_OWNER="${ALDC_REPOSITORY_OWNER:-smkwlab}"
+# owner/repo are embedded in the download URL and, more importantly, used as the
+# extracted directory in `cd` and `rm -rf` below, so validate the character set
+# (GitHub login / repository name) to avoid accidents from a mistyped value.
+case "$REPOSITORY_OWNER" in
+    ''|*[!A-Za-z0-9-]*)
+        echo "Error: invalid ALDC_REPOSITORY_OWNER: ${REPOSITORY_OWNER}" >&2
+        exit 1
+        ;;
+esac
+case "$REPOSITORY_NAME" in
+    ''|*[!A-Za-z0-9._-]*)
+        echo "Error: invalid ALDC_REPOSITORY_NAME: ${REPOSITORY_NAME}" >&2
+        exit 1
+        ;;
+esac
 REPOSITORY_URL="https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}"
 BRANCH='release'
 ZIP_NAME="${REPOSITORY_NAME}-${BRANCH}.zip"
@@ -41,7 +58,9 @@ while [ $# -gt 0 ]; do
             echo "  --help, -h      Show this help message"
             echo ""
             echo "Environment Variables:"
-            echo "  ALDC_QUIET=1    Enable quiet mode"
+            echo "  ALDC_QUIET=1              Enable quiet mode"
+            echo "  ALDC_REPOSITORY_OWNER    Source org/user (default: smkwlab)"
+            echo "  ALDC_REPOSITORY_NAME     Source repo (default: latex-environment)"
             exit 0
             ;;
         *)
