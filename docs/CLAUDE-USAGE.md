@@ -173,7 +173,7 @@ cd project-name
 ### Integration with Existing Workflows
 ```bash
 # Example: Integration with thesis management system
-# thesis-management-tools can use aldc for student setup
+# student-repo-management can use aldc for student setup
 
 # In create-repo scripts:
 echo "Adding LaTeX development environment..."
