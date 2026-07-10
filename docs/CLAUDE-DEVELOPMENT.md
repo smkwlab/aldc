@@ -22,9 +22,11 @@ smkwlab behavior):
 | `ALDC_REPOSITORY_OWNER` | `smkwlab` | Org/user hosting the latex-environment fork. |
 | `ALDC_REPOSITORY_NAME` | `latex-environment` | Repository name to download. |
 
-Both are validated against the GitHub login / repository character set before
-being used in the download URL and the extracted directory (`cd` / `rm -rf`).
-The release branch name is fixed to `release` by convention.
+`ALDC_REPOSITORY_OWNER` is used only in the download URL; `ALDC_REPOSITORY_NAME`
+is additionally used as the extracted directory in `cd` / `rm -rf`. Both are
+validated (GitHub character set, no leading dash, and — for the name — no `.`
+or `..` traversal) before use. The release branch name is fixed to `release`
+by convention.
 
 ## Installation Process
 

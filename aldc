@@ -5,17 +5,19 @@
 # other orgs can point aldc at their own fork via these env vars.
 REPOSITORY_NAME="${ALDC_REPOSITORY_NAME:-latex-environment}"
 REPOSITORY_OWNER="${ALDC_REPOSITORY_OWNER:-smkwlab}"
-# owner/repo are embedded in the download URL and, more importantly, used as the
-# extracted directory in `cd` and `rm -rf` below, so validate the character set
-# (GitHub login / repository name) to avoid accidents from a mistyped value.
+# REPOSITORY_OWNER goes into the download URL; REPOSITORY_NAME is additionally
+# used as the extracted directory in `cd` / `rm -rf` below. Validate both:
+# the GitHub login / repository character set, no leading dash (a leading `-`
+# would be parsed as an option by cd/rm even when quoted), and — for the name —
+# no dot-only / `..` traversal value.
 case "$REPOSITORY_OWNER" in
-    ''|*[!A-Za-z0-9-]*)
+    ''|-*|*[!A-Za-z0-9-]*)
         echo "Error: invalid ALDC_REPOSITORY_OWNER: ${REPOSITORY_OWNER}" >&2
         exit 1
         ;;
 esac
 case "$REPOSITORY_NAME" in
-    ''|.|*..*|*[!A-Za-z0-9._-]*)
+    ''|.|-*|*..*|*[!A-Za-z0-9._-]*)
         echo "Error: invalid ALDC_REPOSITORY_NAME: ${REPOSITORY_NAME}" >&2
         exit 1
         ;;
