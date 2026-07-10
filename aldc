@@ -17,7 +17,7 @@ case "$REPOSITORY_OWNER" in
         ;;
 esac
 case "$REPOSITORY_NAME" in
-    ''|.|-*|*..*|*[!A-Za-z0-9._-]*)
+    ''|.|..|-*|*[!A-Za-z0-9._-]*)
         echo "Error: invalid ALDC_REPOSITORY_NAME: ${REPOSITORY_NAME}" >&2
         exit 1
         ;;

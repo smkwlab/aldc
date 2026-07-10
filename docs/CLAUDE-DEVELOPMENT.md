@@ -113,7 +113,9 @@ texlive-ja-textlint (Docker base image)
 
 ## Security Considerations
 
-- Downloads from official smkwlab repository only
+- Downloads from smkwlab/latex-environment by default; the source is
+  overridable via `ALDC_REPOSITORY_OWNER`/`ALDC_REPOSITORY_NAME`, which are
+  character-validated (no path separators, leading dash, or `.`/`..`)
 - Uses HTTPS for all network communications
 - No external dependencies beyond standard unix tools
 - Repository verification through GitHub's infrastructure
