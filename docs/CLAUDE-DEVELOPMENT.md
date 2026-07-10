@@ -10,9 +10,23 @@ This document covers the development workflow, architecture, and technical detai
 - **Git Integration**: Automatic repository initialization and commit handling
 
 ### Environment Source
-- **Source Repository**: smkwlab/latex-environment
+- **Source Repository**: smkwlab/latex-environment (default)
 - **Branch**: release (stable releases)
 - **Installation Method**: Downloads ZIP, extracts, and integrates files
+
+The source is overridable for other-org deployments (defaults preserve
+smkwlab behavior):
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `ALDC_REPOSITORY_OWNER` | `smkwlab` | Org/user hosting the latex-environment fork. |
+| `ALDC_REPOSITORY_NAME` | `latex-environment` | Repository name to download. |
+
+`ALDC_REPOSITORY_OWNER` is used only in the download URL; `ALDC_REPOSITORY_NAME`
+is additionally used as the extracted directory in `cd` / `rm -rf`. Both are
+validated (GitHub character set, no leading dash, and — for the name — no `.`
+or `..` traversal) before use. The release branch name is fixed to `release`
+by convention.
 
 ## Installation Process
 
@@ -65,7 +79,7 @@ texlive-ja-textlint (Docker base image)
 ## Configuration Details
 
 ### Default Settings
-- **Repository**: smkwlab/latex-environment
+- **Repository**: smkwlab/latex-environment (override with `ALDC_REPOSITORY_OWNER` / `ALDC_REPOSITORY_NAME`)
 - **Branch**: release (for stability)
 - **Installation Location**: Current working directory
 - **Backup Strategy**: Conflicts renamed with `-aldc` suffix
@@ -99,7 +113,9 @@ texlive-ja-textlint (Docker base image)
 
 ## Security Considerations
 
-- Downloads from official smkwlab repository only
+- Downloads from smkwlab/latex-environment by default; the source is
+  overridable via `ALDC_REPOSITORY_OWNER`/`ALDC_REPOSITORY_NAME`, which are
+  character-validated (no path separators, leading dash, or `.`/`..`)
 - Uses HTTPS for all network communications
 - No external dependencies beyond standard unix tools
 - Repository verification through GitHub's infrastructure
