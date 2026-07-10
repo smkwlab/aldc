@@ -15,7 +15,7 @@ case "$REPOSITORY_OWNER" in
         ;;
 esac
 case "$REPOSITORY_NAME" in
-    ''|*[!A-Za-z0-9._-]*)
+    ''|.|*..*|*[!A-Za-z0-9._-]*)
         echo "Error: invalid ALDC_REPOSITORY_NAME: ${REPOSITORY_NAME}" >&2
         exit 1
         ;;
@@ -58,7 +58,7 @@ while [ $# -gt 0 ]; do
             echo "  --help, -h      Show this help message"
             echo ""
             echo "Environment Variables:"
-            echo "  ALDC_QUIET=1              Enable quiet mode"
+            echo "  ALDC_QUIET=1             Enable quiet mode"
             echo "  ALDC_REPOSITORY_OWNER    Source org/user (default: smkwlab)"
             echo "  ALDC_REPOSITORY_NAME     Source repo (default: latex-environment)"
             exit 0
