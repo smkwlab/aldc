@@ -194,11 +194,11 @@ ls -la .github/workflows/  # Should contain CI workflows
 
 # Test compilation
 docker run --rm -v $(pwd):/workspace -w /workspace \
-  ghcr.io/smkwlab/texlive-ja-textlint:2025b \
+  ghcr.io/smkwlab/texlive-ja-textlint:2026d \
   latexmk -pdf main.tex
 
 # Test textlint
 docker run --rm -v $(pwd):/workspace -w /workspace \
-  ghcr.io/smkwlab/texlive-ja-textlint:2025b \
+  ghcr.io/smkwlab/texlive-ja-textlint:2026d \
   textlint *.tex
 ```
