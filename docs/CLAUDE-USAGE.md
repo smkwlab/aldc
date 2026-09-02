@@ -193,12 +193,12 @@ ls -la .devcontainer/  # Should contain devcontainer.json, Dockerfile
 ls -la .github/workflows/  # Should contain CI workflows
 
 # Test compilation
-docker run --rm -v $(pwd):/workspace -w /workspace \
-  ghcr.io/smkwlab/texlive-ja-textlint:2026d \
+docker run --rm -v "$(pwd)":/workspace -w /workspace \
+  ghcr.io/smkwlab/texlive-ja-textlint:2026e \
   latexmk -pdf main.tex
 
 # Test textlint
-docker run --rm -v $(pwd):/workspace -w /workspace \
-  ghcr.io/smkwlab/texlive-ja-textlint:2026d \
+docker run --rm -v "$(pwd)":/workspace -w /workspace \
+  ghcr.io/smkwlab/texlive-ja-textlint:2026e \
   textlint *.tex
 ```
